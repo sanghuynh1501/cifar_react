@@ -12,24 +12,43 @@ function Dropzone() {
     reader.onerror = error => reject(error)
   })
 
+  const predict = () => {
+    ;
+  }
+
   const onDrop = useCallback(async acceptedFiles => {
     let base64_string = await toBase64(acceptedFiles[0])
-    base64_string = base64_string.replace('data:image/jpeg;base64','').replace('data:image/png;base64','')
-    var buffer = Buffer.from(base64_string, 'base64')
-    const image = cv.imdecode(buffer);
-    console.log("image", image)
+    document.getElementById('predict_image')
+    .setAttribute(
+        'src', base64_string
+    )
+    document.getElementById('predict_button').style.display = "inline"
   }, [])
-  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+  const { getRootProps, getInputProps } = useDropzone({onDrop})
 
   return (
-    <div {...getRootProps()}>
-      <input {...getInputProps()} />
+    <>
+      <div {...getRootProps()}>
+        <input {...getInputProps()} />
+        {
+          <img id="predict_image" src="default-image.jpg" alt="" />
+        }
+      </div>
       {
-        isDragActive ?
-          <p>Drop the files here ...</p> :
-          <p>Drag 'n' drop some files here, or click to select files</p>
+        <button 
+          id="predict_button"
+          style={{ display: 'none', marginTop: 10 }}
+          onClick={() => {
+            console.log('window.go ', window.go)
+            WebAssembly.instantiateStreaming(fetch("main.wasm"), window.go.importObject).then((result) => {
+              window.go.run(result.instance);
+            })
+          }}
+        >
+          Predict
+        </button>
       }
-    </div>
+    </>
   )
 }
 
