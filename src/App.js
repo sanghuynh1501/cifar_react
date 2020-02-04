@@ -28,10 +28,13 @@ function Dropzone() {
 
   return (
     <>
+      <div id="predict_label" style={{color: 'white', marginBottom: 10}}>
+        No label
+      </div>
       <div {...getRootProps()}>
         <input {...getInputProps()} />
         {
-          <img id="predict_image" src="default-image.jpg" alt="" />
+          <img style={{height: 300, width: 300}} id="predict_image" src="default-image.jpg" alt="" />
         }
       </div>
       {
