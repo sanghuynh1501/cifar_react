@@ -12,10 +12,6 @@ function Dropzone() {
     reader.onerror = error => reject(error)
   })
 
-  const predict = () => {
-    ;
-  }
-
   const onDrop = useCallback(async acceptedFiles => {
     let base64_string = await toBase64(acceptedFiles[0])
     document.getElementById('predict_image')
@@ -24,7 +20,10 @@ function Dropzone() {
     )
     document.getElementById('predict_button').style.display = "inline"
   }, [])
-  const { getRootProps, getInputProps } = useDropzone({onDrop})
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    accept: ['image/png', 'image/jpeg']
+  })
 
   return (
     <>
